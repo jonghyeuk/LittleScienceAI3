@@ -1,26 +1,29 @@
 # 웹 프레임워크
-streamlit==1.25.0
-streamlit-extras==0.3.2
-streamlit_antd_components==0.2.4
-fastapi==0.100.0
-uvicorn==0.23.1
+streamlit>=1.20.0,<1.26.0
+# 아래 두 패키지는 종종 문제를 일으킬 수 있어 우선 주석 처리
+# streamlit-extras==0.3.2
+# streamlit_antd_components==0.2.4
+
+# 백엔드 - 이 부분은 Streamlit Cloud에서는 사용되지 않으므로 주석 처리
+# fastapi==0.100.0
+# uvicorn==0.23.1
 
 # 데이터 처리
-pandas==2.0.3
-numpy==1.24.3
-matplotlib==3.7.2
-plotly==5.15.0
-fpdf==1.7.2
+pandas>=1.3.0,<2.1.0
+numpy>=1.20.0,<1.25.0
+matplotlib>=3.5.0,<3.8.0
+plotly>=5.10.0,<5.16.0
+fpdf>=1.7.2
 
 # API 클라이언트
-requests==2.31.0
-python-dotenv==1.0.0
+requests>=2.25.0
+python-dotenv>=0.19.0
 
 # 자연어 처리
-beautifulsoup4==4.12.2
-html5lib==1.1
+beautifulsoup4>=4.9.0
+html5lib>=1.1
 
-# 개발 도구
-pytest==7.4.0
-black==23.7.0
-flake8==6.0.0
+# 개발 도구는 배포에 필요하지 않으므로 주석 처리
+# pytest==7.4.0
+# black==23.7.0
+# flake8==6.0.0
