@@ -116,6 +116,48 @@ def typing_effect(text, container, speed=0.03):
         placeholder.markdown(f"<div class='typing-effect'>{text[:i]}</div>", unsafe_allow_html=True)
         time.sleep(speed)
 
+# PDF 생성 함수 추가
+def create_pdf_buffer(paper_content, title):
+    """
+    논문 콘텐츠를 PDF로 변환하여 버퍼 형태로 반환합니다.
+    """
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # 기본 폰트 설정
+    pdf.set_font('Arial', '', 12)
+    
+    # 제목
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(0, 10, title, 0, 1, 'C')
+    pdf.ln(10)
+    
+    # 기본 폰트로 복귀
+    pdf.set_font('Arial', '', 12)
+    
+    # 각 섹션 추가
+    for section_name, section_content in paper_content.items():
+        if section_name in ['introduction', 'methods', 'results', 'conclusion', 'references']:
+            # 마크다운 형식의 텍스트에서 # 제거
+            content = section_content.replace('# ', '')
+            content = content.replace('## ', '  ')
+            
+            # 텍스트 줄 단위로 추가
+            for line in content.split('\n'):
+                if line.strip():
+                    # 한글 지원 문제 때문에 간단한 처리
+                    cleaned_line = ''.join(c if ord(c) < 128 else '_' for c in line)
+                    pdf.multi_cell(0, 10, cleaned_line)
+            
+            pdf.ln(5)
+    
+    # PDF를 바이트 버퍼로 변환
+    pdf_buffer = BytesIO()
+    pdf.output(pdf_buffer)
+    pdf_buffer.seek(0)
+    
+    return pdf_buffer.getvalue()
+
 # 사이드바 및 앱 상태 관리
 def initialize_session_state():
     if 'step' not in st.session_state:
@@ -614,53 +656,161 @@ def render_step7_niche_topics():
             time.sleep(2)  # 로딩 시뮬레이션
             
             # 샘플 데이터 (실제 구현에서는 API 호출 결과로 대체)
-# 샘플 데이터 (실제 구현에서는 API 호출 결과로 대체)
-st.session_state.niche_content = {
-    "introduction": f"""
-    # 서론
-    
-    {selected_niche}은(는) {st.session_state.topic} 연구 분야 내에서 새롭게 주목받고 있는 영역이다. 
-    특히 [틈새 주제의 중요성과 배경]에 비추어볼 때, 이 주제에 대한 체계적인 탐구는 
-    [기대되는 학문적/실용적 기여]를 가져올 것으로 예상된다.
-    
-    현재까지 {st.session_state.topic}에 관한 연구는 주로 [기존 연구 동향]에 초점을 맞추어 왔으나, 
-    [틈새 주제의 차별점]에 대한 연구는 상대적으로 부족한 실정이다. 
-    본 연구는 이러한 연구 공백을 메우기 위해 [연구 목적]을 설정하고, 
-    [핵심 연구 질문]을 탐구하고자 한다.
-    """,
-    
-    "methods": f"""
-    # 연구 방법
-    
-    ## 연구 설계
-    본 연구는 {selected_niche}을(를) 탐구하기 위해 [연구 설계 접근법]을 채택하였다. 
-    이는 [연구 설계의 근거]를 바탕으로 선정되었으며, [연구 절차 개요]와 같은 단계로 진행될 예정이다.
-    
-    ## 자료 수집 방법
-    {selected_niche}에 관한 자료는 [데이터 수집 방법]을 통해 수집될 것이다. 
-    구체적으로는 [데이터 소스, 표본 크기, 표본 추출 방법]을 활용하여 
-    [데이터 수집 기간] 동안 자료를 수집할 것이다.
-    """
-}   # 여기에 중괄호가 닫힘
+            st.session_state.niche_content = {
+                "introduction": f"""
+                # 서론
+                
+                {selected_niche}은(는) {st.session_state.topic} 연구 분야 내에서 새롭게 주목받고 있는 영역이다. 
+                특히 [틈새 주제의 중요성과 배경]에 비추어볼 때, 이 주제에 대한 체계적인 탐구는 
+                [기대되는 학문적/실용적 기여]를 가져올 것으로 예상된다.
+                
+                현재까지 {st.session_state.topic}에 관한 연구는 주로 [기존 연구 동향]에 초점을 맞추어 왔으나, 
+                [틈새 주제의 차별점]에 대한 연구는 상대적으로 부족한 실정이다. 
+                본 연구는 이러한 연구 공백을 메우기 위해 [연구 목적]을 설정하고, 
+                [핵심 연구 질문]을 탐구하고자 한다.
+                """,
+                
+                "methods": f"""
+                # 연구 방법
+                
+                ## 연구 설계
+                본 연구는 {selected_niche}을(를) 탐구하기 위해 [연구 설계 접근법]을 채택하였다. 
+                이는 [연구 설계의 근거]를 바탕으로 선정되었으며, [연구 절차 개요]와 같은 단계로 진행될 예정이다.
+                
+                ## 자료 수집 방법
+                {selected_niche}에 관한 자료는 [데이터 수집 방법]을 통해 수집될 것이다. 
+                구체적으로는 [데이터 소스, 표본 크기, 표본 추출 방법]을 활용하여 
+                [데이터 수집 기간] 동안 자료를 수집할 예정이다.
+                
+                ## 분석 방법
+                수집된 자료는 [분석 방법론]을 활용하여 분석할 계획이다. 
+                이를 통해 [기대되는 분석 결과]를 도출하고, 이를 바탕으로 [연구 질문]에 대한 
+                통찰력 있는 답변을 제시할 수 있을 것으로 기대된다.
+                
+                ## 예상되는 한계점과 극복 방안
+                본 연구는 [예상되는 한계점]을 가질 수 있으나, 
+                [한계점 극복 방안]을 통해 이를 최소화하고자 한다.
+                """,
+                
+                "expected_results": f"""
+                # 예상되는 연구 결과
+                
+                1. [예상 결과 1]: {selected_niche}에 대한 탐구를 통해 [구체적인 예상 결과 1]을 
+                도출할 수 있을 것으로 기대된다. 이는 [결과의 의미]를 시사한다.
+                
+                2. [예상 결과 2]: [구체적인 예상 결과 2]를 통해 기존 [관련 이론이나 관점]에 
+                새로운 시각을 제공할 수 있을 것으로 예상된다.
+                
+                3. [예상 결과 3]: 본 연구의 결과로 [구체적인 예상 결과 3]이 도출될 경우, 
+                이는 [학문적/실용적 의의]를 가질 것으로 기대된다.
+                
+                이러한 연구 결과는 {st.session_state.topic} 분야에서 [기여 방향]으로 활용될 수 있으며, 
+                향후 [관련 후속 연구 방향]에 중요한 기초 자료를 제공할 것이다.
+                """,
+                
+                "disclaimer": f"""
+                # 중요 안내
+                
+                이 내용은 AI에 의해 추론된 자료로, 실제 논문이 아닙니다. 참조용으로만 활용하시기 바라며, 
+                실제 연구를 위해서는 추가적인 문헌 조사와 검증이 필요합니다.
+                """
+            }
+            
+            # 연구 계획 결과 표시
+            st.markdown("<div class='main-title'>틈새주제 연구 계획</div>", unsafe_allow_html=True)
+            
+            # 탭으로 나누어 표시
+            tab1, tab2, tab3 = st.tabs(["서론", "연구 방법", "예상되는 연구 결과"])
+            
+            with tab1:
+                st.markdown("<div class='box-container'>", unsafe_allow_html=True)
+                st.markdown(st.session_state.niche_content["introduction"])
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            with tab2:
+                st.markdown("<div class='box-container'>", unsafe_allow_html=True)
+                st.markdown(st.session_state.niche_content["methods"])
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            with tab3:
+                st.markdown("<div class='box-container'>", unsafe_allow_html=True)
+                st.markdown(st.session_state.niche_content["expected_results"])
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            st.warning(st.session_state.niche_content["disclaimer"])
+            
+            # PDF 다운로드 버튼
+            pdf_data = create_pdf_buffer(st.session_state.niche_content, f"{selected_niche} 연구 계획")
+            st.download_button(
+                label="틈새주제 연구 계획 PDF 다운로드",
+                data=pdf_data,
+                file_name=f"{selected_niche.replace(' ', '_')}_research_plan.pdf",
+                mime="application/pdf",
+            )
+            
+            # 다음 단계로 진행
+            st.session_state.step = 8
 
-# 아래 코드는 들여쓰기를 수정해서 딕셔너리 밖으로 빼야 함
-add_vertical_space(2)
+def render_step8_final_download():
+    st.markdown("<div class='main-title'>PDF 다운로드</div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='box-container'>
+        <p>연구 계획이 성공적으로 생성되었습니다. 아래 버튼을 통해 필요한 자료를 다운로드하세요.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("<div class='paper-card'>", unsafe_allow_html=True)
+        st.markdown("#### 📄 논문 형식 자료")
+        st.markdown(f"주제: {st.session_state.topic}")
+        selected_paper = st.session_state.papers[st.session_state.selected_paper_index]
+        st.markdown(f"기반 논문: {selected_paper['title']}")
+        
+        pdf_data = create_pdf_buffer(st.session_state.paper_content, f"{st.session_state.topic}에 관한 연구")
+        st.download_button(
+            label="논문 형식 PDF 다운로드",
+            data=pdf_data,
+            file_name=f"{st.session_state.topic}_research_paper.pdf",
+            mime="application/pdf",
+            key="download_paper"
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("<div class='paper-card'>", unsafe_allow_html=True)
+        st.markdown("#### 📝 틈새주제 연구 계획")
+        selected_niche = st.session_state.niche_topics[st.session_state.selected_niche_index]
+        st.markdown(f"틈새주제: {selected_niche}")
+        
+        pdf_data = create_pdf_buffer(st.session_state.niche_content, f"{selected_niche} 연구 계획")
+        st.download_button(
+            label="틈새주제 연구 계획 PDF 다운로드",
+            data=pdf_data,
+            file_name=f"{selected_niche.replace(' ', '_')}_research_plan.pdf",
+            mime="application/pdf",
+            key="download_niche"
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    add_vertical_space(2)
+    
+    # 현재 주제 표시
+    if st.session_state.topic:
+        st.info(f"현재 주제: {st.session_state.topic}")
+    
+    add_vertical_space(2)
+    
+    # 새로 시작하기 버튼
+    if st.button("새로 시작하기"):
+        for key in list(st.session_state.keys()):
+            if key != 'step':
+                del st.session_state[key]
+        st.session_state.step = 1
+        st.rerun()
 
-# 현재 주제 표시
-if st.session_state.topic:
-    st.info(f"현재 주제: {st.session_state.topic}")
-
-add_vertical_space(2)
-
-# 새로 시작하기 버튼
-if st.button("새로 시작하기"):
-    for key in list(st.session_state.keys()):
-        if key != 'step':
-            del st.session_state[key]
-    st.session_state.step = 1
-    st.rerun()
-
-# 단계별 렌더링 함수
 def render_step1_topic_input():
     col1, col2 = st.columns([2, 1])
     
@@ -789,3 +939,40 @@ def render_step2_topic_analysis():
     st.markdown("<div class='box-container'>", unsafe_allow_html=True)
     st.markdown(st.session_state.topic_analysis['history'])
     st.markdown("</div>", unsafe_allow_html=True)
+    
+    # 다음 단계로 진행
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        if st.button("이전", key="prev_step2"):
+            st.session_state.step = 1
+            st.rerun()
+    with col2:
+        if st.button("다음: 과학적/사회적 이슈 확인", type="primary", key="next_step2"):
+            st.session_state.step = 3
+            st.rerun()
+
+# 메인 앱 로직
+def main():
+    # 앱 상태 초기화
+    initialize_session_state()
+    
+    # 단계에 따라 적절한 화면 렌더링
+    if st.session_state.step == 1:
+        render_step1_topic_input()
+    elif st.session_state.step == 2:
+        render_step2_topic_analysis()
+    elif st.session_state.step == 3:
+        render_step3_research_info()
+    elif st.session_state.step == 4:
+        render_step4_similar_papers()
+    elif st.session_state.step == 5:
+        render_step5_paper_selection()
+    elif st.session_state.step == 6:
+        render_step6_paper_format()
+    elif st.session_state.step == 7:
+        render_step7_niche_topics()
+    elif st.session_state.step == 8:
+        render_step8_final_download()
+
+if __name__ == "__main__":
+    main()
