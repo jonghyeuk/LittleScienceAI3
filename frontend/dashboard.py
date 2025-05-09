@@ -639,8 +639,7 @@ def render_step7_niche_topics():
                 {selected_niche}에 관한 자료는 [데이터 수집 방법]을 통해 수집될 것이다. 
                 구체적으로는 [데이터 소스, 표본 크기, 표본 추출 방법]을 활용하여 
                 [데이터 수집 기간] 동안 자료를 수집할 것이다.
-                """}, unsafe_allow_html=True)
-        
+                """}, unsafe_allow_html=True)        
         add_vertical_space(2)
         
         # 현재 주제 표시
