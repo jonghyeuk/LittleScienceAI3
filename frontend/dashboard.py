@@ -956,55 +956,55 @@ def render_step2_topic_analysis():
                - 연구 발전기 (1980-2000년대): [주요 발전 내용 및 패러다임 변화]
                - 현대적 접근 (2000년대 이후): [최신 연구 동향 및 방법론]
                
-               특히 [중요한 역사적 사건이나 발견]은 이 분야의 중요한 전환점이 되었습니다.
-               """
-           }
-   
-   # 주제 정의 표시
-   st.markdown("<div class='sub-title'>주제 정의 및 배경</div>", unsafe_allow_html=True)
-   st.markdown("<div class='box-container'>", unsafe_allow_html=True)
-   st.markdown(st.session_state.topic_analysis['definition'])
-   st.markdown("</div>", unsafe_allow_html=True)
-   
-   # 역사적 발전 과정 표시
-   st.markdown("<div class='sub-title'>역사적 발전 과정</div>", unsafe_allow_html=True)
-   st.markdown("<div class='box-container'>", unsafe_allow_html=True)
-   st.markdown(st.session_state.topic_analysis['history'])
-   st.markdown("</div>", unsafe_allow_html=True)
-   
-   # 다음 단계로 진행
-   col1, col2 = st.columns([1, 5])
-   with col1:
-       if st.button("이전", key="prev_step2"):
-           st.session_state.step = 1
-           st.rerun()
-   with col2:
-       if st.button("다음: 과학적/사회적 이슈 확인", type="primary", key="next_step2"):
-           st.session_state.step = 3
-           st.rerun()
+              특히 [중요한 역사적 사건이나 발견]은 이 분야의 중요한 전환점이 되었습니다.
+                """
+            }
+    
+    # 주제 정의 표시
+    st.markdown("<div class='sub-title'>주제 정의 및 배경</div>", unsafe_allow_html=True)
+    st.markdown("<div class='box-container'>", unsafe_allow_html=True)
+    st.markdown(st.session_state.topic_analysis['definition'])
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # 역사적 발전 과정 표시
+    st.markdown("<div class='sub-title'>역사적 발전 과정</div>", unsafe_allow_html=True)
+    st.markdown("<div class='box-container'>", unsafe_allow_html=True)
+    st.markdown(st.session_state.topic_analysis['history'])
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # 다음 단계로 진행
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        if st.button("이전", key="prev_step2"):
+            st.session_state.step = 1
+            st.rerun()
+    with col2:
+        if st.button("다음: 과학적/사회적 이슈 확인", type="primary", key="next_step2"):
+            st.session_state.step = 3
+            st.rerun()
 
 # 메인 앱 로직
 def main():
-   # 앱 상태 초기화
-   initialize_session_state()
-   
-   # 단계에 따라 적절한 화면 렌더링
-   if st.session_state.step == 1:
-       render_step1_topic_input()
-   elif st.session_state.step == 2:
-       render_step2_topic_analysis()
-   elif st.session_state.step == 3:
-       render_step3_research_info()
-   elif st.session_state.step == 4:
-       render_step4_similar_papers()
-   elif st.session_state.step == 5:
-       render_step5_paper_selection()
-   elif st.session_state.step == 6:
-       render_step6_paper_format()
-   elif st.session_state.step == 7:
-       render_step7_niche_topics()
-   elif st.session_state.step == 8:
-       render_step8_final_download()
+    # 앱 상태 초기화
+    initialize_session_state()
+    
+    # 단계에 따라 적절한 화면 렌더링
+    if st.session_state.step == 1:
+        render_step1_topic_input()
+    elif st.session_state.step == 2:
+        render_step2_topic_analysis()
+    elif st.session_state.step == 3:
+        render_step3_research_info()
+    elif st.session_state.step == 4:
+        render_step4_similar_papers()
+    elif st.session_state.step == 5:
+        render_step5_paper_selection()
+    elif st.session_state.step == 6:
+        render_step6_paper_format()
+    elif st.session_state.step == 7:
+        render_step7_niche_topics()
+    elif st.session_state.step == 8:
+        render_step8_final_download()
 
 if __name__ == "__main__":
-   main()
+    main()
