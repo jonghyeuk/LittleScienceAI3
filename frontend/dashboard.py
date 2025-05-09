@@ -1,6 +1,18 @@
 # frontend/dashboard.py
 import streamlit as st
-from streamlit_extras.colored_header import colored_header
+# from streamlit_extras.colored_header import colored_header
+# 직접 구현한 colored_header 함수
+def colored_header(label, description=None, color_name="blue"):
+    """
+    해더에 컬러를 입힐 수 있는 함수
+    """
+    html = f"""
+    <div style="background-color:{color_name};padding:10px;border-radius:10px;margin-bottom:10px;">
+        <h2 style="color:white;margin-bottom:0px;">{label}</h2>
+        <p style="color:white;margin-bottom:0px;">{description if description else ''}</p>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
 from streamlit_extras.add_vertical_space import add_vertical_space
 from streamlit_extras.stateful_button import button
 import streamlit.components.v1 as components
