@@ -2,6 +2,7 @@
 import logging
 import os
 import json
+import re  # 추가된 import
 from typing import List, Dict, Any, Optional
 import requests
 from dotenv import load_dotenv
