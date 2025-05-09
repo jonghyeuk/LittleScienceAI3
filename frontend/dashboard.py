@@ -13,7 +13,14 @@ def colored_header(label, description=None, color_name="blue"):
     </div>
     """
     st.markdown(html, unsafe_allow_html=True)
-from streamlit_extras.add_vertical_space import add_vertical_space
+# from streamlit_extras.add_vertical_space import add_vertical_space
+# 직접 구현한 add_vertical_space 함수
+def add_vertical_space(num_lines=1):
+    """
+    수직 여백을 추가하는 함수
+    """
+    for _ in range(num_lines):
+        st.markdown("<br>", unsafe_allow_html=True)
 from streamlit_extras.stateful_button import button
 import streamlit.components.v1 as components
 import streamlit_antd_components as sac
