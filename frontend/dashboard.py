@@ -641,22 +641,24 @@ st.session_state.niche_content = {
     구체적으로는 [데이터 소스, 표본 크기, 표본 추출 방법]을 활용하여 
     [데이터 수집 기간] 동안 자료를 수집할 것이다.
     """
-}   
-        add_vertical_space(2)
-        
-        # 현재 주제 표시
-        if st.session_state.topic:
-            st.info(f"현재 주제: {st.session_state.topic}")
-        
-        add_vertical_space(2)
-        
-        # 새로 시작하기 버튼
-        if st.button("새로 시작하기"):
-            for key in list(st.session_state.keys()):
-                if key != 'step':
-                    del st.session_state[key]
-            st.session_state.step = 1
-            st.rerun()
+}   # 여기에 중괄호가 닫힘
+
+# 아래 코드는 들여쓰기를 수정해서 딕셔너리 밖으로 빼야 함
+add_vertical_space(2)
+
+# 현재 주제 표시
+if st.session_state.topic:
+    st.info(f"현재 주제: {st.session_state.topic}")
+
+add_vertical_space(2)
+
+# 새로 시작하기 버튼
+if st.button("새로 시작하기"):
+    for key in list(st.session_state.keys()):
+        if key != 'step':
+            del st.session_state[key]
+    st.session_state.step = 1
+    st.rerun()
 
 # 단계별 렌더링 함수
 def render_step1_topic_input():
