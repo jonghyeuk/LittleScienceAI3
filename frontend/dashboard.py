@@ -784,4 +784,4 @@ def render_step2_topic_analysis():
     st.markdown("<div class='sub-title'>역사적 발전 과정</div>", unsafe_allow_html=True)
     st.markdown("<div class='box-container'>", unsafe_allow_html=True)
     st.markdown(st.session_state.topic_analysis['history'])
-    st.markdown("</div
+    st.markdown("</div>", unsafe_allow_html=True)
